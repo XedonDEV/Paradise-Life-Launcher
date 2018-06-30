@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html ng-app="App">
+<head>
+    <meta charset="UTF-8">
+    <title>Unity-Life</title>
+
+    <!-- config -->
+    <script src="config.js"></script>
+
+    <!-- angular -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-tooltips/dist/angular-tooltips.min.js"></script>
+    <link href="node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet">
+
+    <!-- tether -->
+    <link href="node_modules/tether/dist/css/tether.min.css" rel="stylesheet">
+    <script src="node_modules/tether/dist/js/tether.min.js"></script>
+
+    <!-- jquery -->
+    <script type="text/javascript">
+      window.$ = window.jQuery = require('./resources/jquery/jquery-1.12.3.min.js');
+    </script>
+
+    <!-- bootstrap -->
+    <link href="resources/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- fa icons-->
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+
+    <!-- alertify -->
+    <script src="node_modules/alertify/lib/alertify.min.js"></script>
+    <!-- include the core styles -->
+    <link rel="stylesheet" href="resources/css/alertify.core.css" />
+
+    <!-- perfect-scrollbar -->
+    <script src="node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
+
+    <link href="node_modules/icheck/skins/minimal/minimal.css" rel="stylesheet">
+    <script src="node_modules/icheck/icheck.min.js"></script>
+
+    <!-- custom css/js -->
+    <link rel="stylesheet" href="resources/css/custom.css">
+
+    <script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="bg-img"></div>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container container-navbar">
+            <div class="navbar-header">
+                <a href="https://unity-life.de/index.php?board-list/" class="navbar-brand"><img src="resources/img/logo.png"></a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <button ng-click="refresh()"
+                                class="btn btn-success btn-reload fa fa-sync"></button>
+                    </li>
+                    <li>
+                        <button ng-click="minimizeApp()"
+                                class="btn btn-warning btn-minimize fa fa-window-minimize"></button>
+                    </li>
+                    <li>
+                        <button ng-click="closeApp()"
+                                class="btn btn-danger btn-close fa fa-window-close"></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs nav-justified main-nav">
+                <li class="active"><a data-toggle="tab" href="#mods">STARTSEITE</a></li>
+                <li><a data-toggle="tab" href="#server">SERVER</a></li>
+                <li><a id="settingsTab" data-toggle="tab" href="#settings">EINSTELLUNGEN</a></li>
+                <li><a data-toggle="tab" href="#about">INFO</a></li>
+            </ul>
+            <div class="tab-content main-content">
+                <div id="mods" class="tab-pane fade in active" ng-controller="modController" data-ng-init="init()">
+                    <div class="row">
+                        <div class="col-lg-8" id="modScroll" style="position: relative">
+                            <div class="loading-centered" ng-if="loading">
+                                <img src="resources/loading/loading.svg">
+                            </div>
+                            <div id="modCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="item" ng-repeat="mod in mods" ng-class='{active:$first}'>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="panel panel-mod">
+                                                    <div class="panel-heading">
+                                                        <h4 class="margin-none">{{mod.Name}}</h4>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="modImg img-thumbnail"></div>
+                                                        <hr>
+                                                        {{mod.Description}}
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        <div class="btn-group btn-group-sm">
+                                                            <button class="btn btn-success btn-sm"
+                                                                    ng-click="action(mod)"
+                                                                    ng-disabled="downloading || mod.state[0] == 0">
+                                                                {{mod.state[1]}}
+                                                            </button>
+                                                            <button class="btn btn-warning btn-sm"
+                                                                    ng-show="mod.state[0] !== 0 && mod.HasGameFiles"
+                                                                    ng-click="initHash(mod)" ng-disabled="downloading">
+                                                                Prüfen
+                                                            </button>
+                                                            <button class="btn btn-success btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="openModDir(mod)"><span class=" glyphicon glyphicon-folder-open"></span></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group list-group-unbordered margin-none">
+                                <li class="list-group-item">
+                                    <b>Download-Status: </b> <a class="pull-right"><span tooltips tooltip-template="{{hint}}">{{state}}</span></a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Download: </b> <a class="pull-right"><span tooltips
+                                                                                tooltip-template="Download Geschwindigkeit">{{speed}} MB/s</span></a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Heruntergeladen: </b> <a class="pull-right">{{totalDownloaded}} GB/{{totalSize}}GB</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Verbleibend: </b> <a class="pull-right"><span tooltips
+                                                                                   tooltip-template="Verbleibende Zeit">{{totalETA}}</span></a>
+                                </li>
+                            </ul>
+                            <br>
+                            <button class="btn btn-danger btn-sm pull-right" ng-click="cancel()" ng-if="downloading">
+                                Abbrechen <i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="settings" class="tab-pane fade">
+                    <div class="container" ng-controller="settingsController" data-ng-init="init()">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="pathInput">Arma 3 Pfad</label>
+                                    <div class="input-group">
+                                        <input id="pathInput" class="form-control" type="text"
+                                               placeholder="Kein Arma Pfad gesetzt" ng-model="ArmaPath" disabled>
+                                        <span class="input-group-btn">
+                                                <button ng-disabled="downloading" class="btn btn-primary" type="button"
+                                                        ng-click="chooseArmaPath()"><span
+                                                        class="glyphicon glyphicon-open-file"></span></button>
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-inline">
+                                        <label for="splashCheck">Kein Splashscreen</label>
+                                        <span class="pull-right">
+                                                <input id="splashCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="introCheck">Intro überspringen</label>
+                                        <span class="pull-right">
+                                                <input id="introCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="htCheck">Hyper-Threading</label>
+                                        <span class="pull-right">
+                                                <input id="htCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="windowedCheck">Fenstermodus</label>
+                                        <span class="pull-right">
+                                                <input id="windowedCheck" type="checkbox">
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="memInput">Maximaler RAM</label>
+                                                <input ng-model="mem" ng-change="saveSettings()" id="memInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vmemInput">Maximaler vRam</label>
+                                                <input ng-model="vram" ng-change="saveSettings()" id="vmemInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="cpuInput">CPU Anzahl</label>
+                                                <input ng-model="cpu" ng-change="saveSettings()" id="cpuInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="threadsInput">Extra Threads</label>
+                                                <input ng-model="thread" ng-change="saveSettings()" id="threadsInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="addInput">Eigene Startparameter</label>
+                                                <input ng-model="add_params" ng-change="saveSettings()" id="addInput"
+                                                       class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div id="server" class="tab-pane fade">
+                        <ul class="nav nav-tabs ">
+                                <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
+                                <li><a data-toggle="tab" href="#tstab">Teamspeak Server</a></li>
+                            </ul>
+                        
+                    <div class="tab-pane fade in active", id="armatab" >
+                        <div class="row">
+                            <div  class="col-6" ng-controller="a3Controller">
+                                <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 350px;position: relative;" >
+                                    <li class="list-group-item", ng-repeat="player in players">
+                                        <!-- Das hier muss in die Mitte
+                                        <b>{{ player }}</b>
+
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-4" ng-controller="a3Controller">
+                                <!--Das hier muss rechts an die Seite!
+                                Server Info:
+                                <br>
+                                <b>{{ html.raw.numplayers }} / {{ html.maxplayers }} Spieler sind online </b><br>
+                                <b>IP Adresse:{{ html.query.host }}</b><br>
+                                <b>Port:{{ html.query.port}}</b><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade", id="tstab">
+                            <div class="col-md-4", ng-controller="tsController">
+                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 100px;position: relative;" >
+                                            <li class="list-group-item", ng-repeat="player in players">
+                                                <!-- Das hier muss in die Mitte
+                                                 <b>{{ player }}</b>
+                                                 
+                                            </li>
+                                          </ul>
+                                          <!-- Das hier muss rechts an die Seite!
+                                          Server Info:
+                                          <br>
+                                          <b>{{ html.players.length }} / {{ html.maxplayers }} Spieler sind online</b><br>
+                                          <b>IP Adresse:{{ html.query.host }}</b><br>
+                                          <b>Port:{{html.query.port}}</b><br>
+                                    </div>    
+                            </div>       
+                    </div>     
+                </div>-->
+                <div id="server" class="tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
+                        <li><a data-toggle="tab" href="#tstab">Teamspeak Server</a></li>
+                    </ul>
+                    <div class="row">
+                        <div class="tab-pane fade in active" id="armatab">
+                                <div class="col-md-7" ng-controller="a3Controller">
+                                        <h4 class="onlineplayers">Online Spieler:</h4><br>
+                                    <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
+                                        <li class="list-group-item", ng-repeat="player in players"><b>{{ player }}</b></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4" ng-controller="a3Controller">
+                                    <br>
+                                    <h4 class="serverinfo">Server Info:</h4>
+                                    <hr>
+
+                                    <b>{{ armahtml.raw.numplayers }} von {{ armahtml.maxplayers }} Spieler sind online </b>
+                                    <hr>
+                                    <b>IP Adresse: {{ armahtml.query.host }}</b>
+                                    <hr>
+                                    <b>Port: {{ armahtml.query.port }}</b>
+                                    <hr>
+                                </div>
+                        </div>
+                        <div class="tab-pane fade" id="tstab">
+                                <div class="col-md-7" ng-controller="tsController">
+                                        <h4 class="onlineplayers">Online Spieler:</h4><br>
+        
+                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
+                                        <li class="list-group-item", ng-repeat="player in players">
+                                            <b>{{ player }}</b></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4" ng-controller="tsController">
+                                    <br>
+                                    <h4 class="serverinfo">Server Info:</h4>
+                                    <hr>
+                                    <b>{{ tshtml.players.length }} von {{ tshtml.maxplayers }} Spieler sind online</b>
+                                    <hr>
+                                    <b>IP Adresse: {{ tshtml.query.host }}</b>
+                                    <hr>
+                                    <b>Port: {{ tshtml.query.port }}</b>
+                                    <hr>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="about" ng-controller="aboutController" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-4 centered">
+                            <a class="no-deco" href="ts3server://ts.Unity-Life.de ?port=9987">
+                                <img src="resources/icon/teamspeak.png">
+                            </a>
+                            <br>
+                            <h4><a href="ts3server://ts.Unity-Life.de ?port=9987">Teamspeak 3</a></h4>
+                        </div>
+                        <div class="col-md-4 centered">
+                            <a class="no-deco" href="https://unity-life.de/index.php?board-list/">
+                                <img src="resources/icon/forum.png">
+                            </a>
+                            <br>
+                            <h4><a href="https://unity-life.de/index.php?board-list/">Forum</a></h4>
+                        </div>
+                        <div class="col-md-4 centered">
+                            <a class="no-deco" href="https://unity-life.de/index.php?board-list/">
+                                <img src="resources/icon/web.png">
+                            </a>
+                            <br>
+                            <h4><a href="https://unity-life.de">Website</a></h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-md-12 centered">
+                        <h5>Unity-Life Launcher v{{version}}</h5>
+                        <h8>Entwickelt durch</h8><br>
+                        <h8> <a href="https://Coffee-Apps.com">Coffee-Apps.com</a></h8><br>
+                        <h8>©2018 <a href="https://Coffee-Apps.com">Coffee-Apps.com</a></h8>
+                    </div>
+                </div>
+            </div>
+            <div class="pg-bars">
+                <span class="label label-primary label-large" ng-if="fileName !== ''">{{fileName}}</span>
+                <span class="label label-primary pull-right" ng-if="speed > 0">{{speed}} Mb/s</span>
+                <div class="progress progress-striped active" ng-if="fileProgress > 0 || pgbar > 0">
+                    <div class="progress-bar progress-bar-success" style="width: {{fileProgress}}%;"></div>
+                </div>
+                <div class="progress progress-striped active" ng-if="fileProgress > 0">
+                    <div class="progress-bar" style="width: {{totalProgress}}%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+  $(document).on('click', 'a[href^="htt"]', function (event) {
+    if (this.href != "") {
+      event.preventDefault();
+      shell.openExternal(this.href);
+    }
+  });
+
+  $(document).ready(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_minimal',
+      radioClass: 'iradio_minimal',
+      increaseArea: '20%' // optional
+    });
+    appLoaded()
+  });
+</script>
+</html>
