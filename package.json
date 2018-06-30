@@ -1,0 +1,79 @@
+{
+  "name": "Unity-Life",
+  "version": "1.1.0",
+  "description": "Unity-Life Launcher",
+  "homepage": "https://unity-life.de",
+  "author": "Coffee-Apps",
+  "main": "main.js",
+  "readme": "README.md",
+  "scripts": {
+    "start": "electron .",
+    "dist": "build",
+    "publish": "publish release.json",
+    "release": "npm run dist && npm run publish"
+  },
+  "standard": {
+    "ignore": [
+      "config.js"
+    ]
+  },
+  "build": {
+    "appId": "unity-life.coffee-apps.com",
+    "win": {
+      "certificateFile": "./cert/codesign/my_signing_key.pfx",
+      "certificatePassword": "wrAFV9ewEjHfcMxdsS98CQgJdV28aMYnJnzHTYJBqpwrxN9WuKbFXkdMsBWD",
+      "target": "squirrel"
+    },
+    "squirrelWindows": {
+      "iconUrl": "https://webstorage1.gaming-provider.com/dwcentral/ParadiseLife/static/icon.ico"
+    }
+  },
+  "updater": {
+    "url": "https://cloud.coffee-apps.com/cc/unitylife/updates/updates.json"
+  },
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron": "*",
+    "electron-builder": "^20.19.0",
+    "electron-builder-squirrel-windows": "^20.2.0",
+    "electron-simple-publisher": "^0.4.9",
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-config-standard-jsx": "^3.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-react": "^6.8.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "standard": "*"
+  },
+  "contributors": [
+    {
+      "name": "XedonDEV",
+      "email": "xedon@arctic-network.com",
+      "url": "https://github.com/XedonDEV"
+    }
+  ],
+  "dependencies": {
+    "alertify": "^0.3.0",
+    "angular": "^1.6.0",
+    "angular-tooltips": "^1.1.8",
+    "bootstrap": "^3.3.7",
+    "electron-json-storage": "^2.1.0",
+    "electron-simple-updater": "^1.2.3",
+    "electron-squirrel-startup": "1.0.0",
+    "font-awesome": "^4.7.0",
+    "get-json": "^1.0.0",
+    "hasha": "^2.2.0",
+    "humanize-duration": "^3.10.0",
+    "icheck": "^1.0.2",
+    "jquery": "^3.1.1",
+    "jsonist": "^1.3.0",
+    "mkpath": "1.0.0",
+    "path": "^0.12.7",
+    "perfect-scrollbar": "^0.6.15",
+    "progress-stream": "1.2.0",
+    "request": "^2.87.0",
+    "request-progress": "^3.0.0",
+    "tether": "^1.4.0",
+    "winreg": "^1.2.3"
+  }
+}
