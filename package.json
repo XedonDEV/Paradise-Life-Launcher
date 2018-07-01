@@ -19,12 +19,14 @@
   },
   "build": {
     "appId": "unity-life.coffee-apps.com",
+    "copyright": "Copyright ©2018 Coffee-Apps.com",
     "win": {
       "certificateFile": "./cert/codesign/my_signing_key.pfx",
       "certificatePassword": "wrAFV9ewEjHfcMxdsS98CQgJdV28aMYnJnzHTYJBqpwrxN9WuKbFXkdMsBWD",
       "target": "squirrel"
     },
     "squirrelWindows": {
+      "loadingGif": "./rescources/install.gif",
       "iconUrl": "https://webstorage1.gaming-provider.com/dwcentral/ParadiseLife/static/icon.ico"
     }
   },
@@ -33,7 +35,7 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "*",
+    "electron": "^2.0.3",
     "electron-builder": "^20.19.0",
     "electron-builder-squirrel-windows": "^20.2.0",
     "electron-simple-publisher": "^0.4.9",
@@ -47,9 +49,9 @@
   },
   "contributors": [
     {
-      "name": "XedonDEV",
+      "name": "Fichtner Lukas",
       "email": "xedon@arctic-network.com",
-      "url": "https://github.com/XedonDEV"
+      "url": "https://github.com/Xedon420"
     }
   ],
   "dependencies": {
