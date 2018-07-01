@@ -2,7 +2,7 @@
  * Unity-Life Launcher by Coffee-Apps
  *
  * Email: xedon@arctic-network.com
- * Web: coffee-apps.com
+ * Web: https://coffee-apps.com
  */
 
 const {ipcRenderer} = require('electron')
