@@ -76,8 +76,6 @@ function handleSquirrelEvent () {
       return true
   }
 }
-
-var version = app.getVersion()
 // ------------------------------------------- real stuff that does something ----------------------------------------------------------------
 
 let win
@@ -88,7 +86,7 @@ let loadWin
 function createWindows () {
   // web process
   webWin = new BrowserWindow({
-    icon: 'icon/workericon.ico',
+    icon: 'resources/icon/icon.ico',
     width: 1000,
     height: 500,
     show: false
@@ -100,7 +98,7 @@ function createWindows () {
 
   // download process
   downWin = new BrowserWindow({
-    icon: 'icon/workericon.ico',
+    icon: 'resources/icon/icon.ico',
     width: 1000,
     height: 500,
     show: false
@@ -112,7 +110,7 @@ function createWindows () {
 
   // Create the browser window.
   win = new BrowserWindow({
-    icon: 'icon/appicon.ico',
+    icon: 'resources/icon/icon.ico',
     width: 1300,
     height: 700,
     /*

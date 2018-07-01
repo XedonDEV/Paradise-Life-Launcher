@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Unity-Life Launcher",
   "homepage": "https://unity-life.de",
-  "author": "Coffee-Apps",
+  "author": "Coffee-Apps.com",
   "main": "main.js",
   "readme": "README.md",
   "scripts": {
@@ -18,7 +18,7 @@
     ]
   },
   "build": {
-    "appId": "unity-life.coffee-apps.com",
+    "appId": "unity-life.cc.coffee-apps.com",
     "copyright": "Copyright ©2018 Coffee-Apps.com",
     "win": {
       "certificateFile": "./cert/codesign/my_signing_key.pfx",
