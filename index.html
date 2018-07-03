@@ -33,13 +33,7 @@
     <!-- include the core styles -->
     <link rel="stylesheet" href="resources/css/alertify.core.css" />
 
-    <!-- smoothiecharts -->
-    <script src="node_modules/smoothie/smoothie.js"></script>
-
-    <!-- chartjs -->
-    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
-
-<!-- perfect-scrollbar -->
+    <!-- perfect-scrollbar -->
     <script src="node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
     <link rel="stylesheet" href="node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
 
@@ -48,10 +42,6 @@
 
     <!-- custom css/js -->
     <link rel="stylesheet" href="resources/css/custom.css">
-
-    <!-- HoverCSS css/js -->
-    <link rel="stylesheet" href="resources/css/hover.css">
-    <link rel="stylesheet" href="resources/css/hover-min.css">
 
     <script type="text/javascript" src="index.js"></script>
 </head>
@@ -73,16 +63,16 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <button  ng-click="refresh()" type="button" 
-                        class="list-group-item btn-link button-reload hvr-icon-spin fa fa-recycle"></button>
+                        <button ng-click="refresh()"
+                                class="btn btn-success btn-reload glyphicon glyphicon-retweet"></button>
                     </li>
                     <li>
-                        <button  ng-click="minimizeApp()" type="button" 
-                        class="list-group-item btn-link btn-sm button-minimize hvr-flade fa fa-window-minimize"></button>
+                        <button ng-click="minimizeApp()"
+                                class="btn btn-warning btn-minimize glyphicon glyphicon-minus"></button>
                     </li>
                     <li>
-                        <button  ng-click="closeApp()" type="button" 
-                        class="list-group-item btn-link btn-sm button-close hvr-flade fa fa-window-close"></button>
+                        <button ng-click="closeApp()"
+                                class="btn btn-danger btn-close glyphicon glyphicon-remove"></button>
                     </li>
                 </ul>
             </div>
@@ -90,29 +80,15 @@
     </div>
     <div class="content">
         <div class="container">
-            <div class="container-menu">
             <ul class="nav nav-tabs nav-justified main-nav">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <li class="active button-list"><a data-toggle="tab" href="#mods"><i class="fa fa-code fa-2x" aria-hidden="true"></i></a></li><br>
-                <li><a data-toggle="tab" href="#server"><i class="button-list fa fa-server fa-2x" aria-hidden="true"></i></a></li><br>
-                <li><a id="settingsTab" data-toggle="tab" href="#settings"><i class="button-list fa fa-cogs fa-2x" aria-hidden="true"></i></a></li><br>
-                <li><a data-toggle="tab" href="#about"><i class="button-list fa fa-info-circle fa-2x" aria-hidden="true"></i></a></li>
+                <li class="active"><a data-toggle="tab" href="#mods">STARTSEITE</a></li>
+                <li><a data-toggle="tab" href="#server">SERVER</a></li>
+                <li><a id="settingsTab" data-toggle="tab" href="#settings">EINSTELLUNGEN</a></li>
+                <li><a data-toggle="tab" href="#about">INFO</a></li>
             </ul>
-            </div>
-            <br>
-            <div class="tab-content">
-                <div id="mods" class="tab-pane fade in active">
+            <div class="tab-content main-content">
+                <div id="mods" class="tab-pane fade in active" ng-controller="modController" data-ng-init="init()">
                     <div class="row">
-                        <div ng-controller="modController" data-ng-init="init()">
                         <div class="col-lg-8" id="modScroll" style="position: relative">
                             <div class="loading-centered" ng-if="loading">
                                 <img src="resources/loading/loading.svg">
@@ -126,6 +102,14 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="panel panel-mod">
+                                                    <div class="panel-heading">
+                                                        <h4 class="margin-none">{{mod.Name}}</h4>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="modImg img-thumbnail"></div>
+                                                        <hr>
+                                                        {{mod.Description}}
+                                                    </div>
                                                     <div class="panel-footer">
                                                         <div class="btn-group btn-group-sm">
                                                             <button class="btn btn-success btn-sm"
@@ -141,37 +125,31 @@
                                                             <button class="btn btn-success btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="openModDir(mod)"><span class=" glyphicon glyphicon-folder-open"></span></button>
                                                         </div>
                                                     </div>
-
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                                <br>
-                                <br>
-                            </div>
                         </div>
-                        <div class="down-list">
-                            <div ng-controller="modController" data-ng-init="init()">
+                        <div class="col-lg-4">
                             <ul class="list-group list-group-unbordered margin-none">
                                 <li class="list-group-item">
-                                    <b>Status</b> <a class="pull-right"><span tooltips tooltip-template="{{hint}}">{{state}}</span></a>
+                                    <b>Download-Status: </b> <a class="pull-right"><span tooltips tooltip-template="{{hint}}">{{state}}</span></a>
                                 </li>
-                                <li class="list-group-item" ng-if="downloading && downSpeed > 0">
-                                    <b>Geschwindigkeit</b> <a class="pull-right"><span tooltips tooltip-template="Download Geschwindigkeit">{{downSpeed}} Mb/s</span></a>
+                                <li class="list-group-item">
+                                    <b>Download: </b> <a class="pull-right"><span tooltips
+                                                                                tooltip-template="Download Geschwindigkeit">{{speed}} MB/s</span></a>
                                 </li>
-                                <li class="list-group-item" ng-if="totalSize > 0">
-                                    <b>Heruntergeladen</b> <a class="pull-right">{{totalDownloaded}} GB/{{totalSize}} GB</a>
+                                <li class="list-group-item">
+                                    <b>Heruntergeladen: </b> <a class="pull-right">{{totalDownloaded}} GB/{{totalSize}}GB</a>
                                 </li>
-                                <li class="list-group-item" ng-if="totalETA !== ''">
-                                    <b>Verbleibend</b> <a class="pull-right"><span tooltips tooltip-template="Zeit verbleibend">{{totalETA}}</span></a>
-
-                                <li class="list-group-item" ng-if="fileSpeed > 0">
-                                    <b>Datei</b> <a class="pull-right">{{fileSpeed}} Mb/s</a>
-                                </li>
-                                <li class="list-group-item" ng-if="fileName !== ''">
-                                    <b>Dateiname</b> <a class="pull-right">{{fileName}}</a>
+                                <li class="list-group-item">
+                                    <b>Verbleibend: </b> <a class="pull-right"><span tooltips
+                                                                                   tooltip-template="Verbleibende Zeit">{{totalETA}}</span></a>
                                 </li>
                             </ul>
                             <br>
@@ -179,20 +157,136 @@
                                 Abbrechen <i class="fa fa-times"></i></button>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <div class="pg-bars">
-                        <span class="label label-primary label-large" ng-if="fileName !== ''">{{fileName}}</span>
-                        <span class="label label-primary pull-right" ng-if="speed > 0">{{speed}} Mb/s</span>
-                        <div class="progress progress-striped active" ng-if="fileProgress > 0 || pgbar > 0">
-                            <div class="progress-bar progress-bar-success" style="width: {{fileProgress}}%;"></div>
+                </div>
+                <div id="settings" class="tab-pane fade">
+                    <div class="container" ng-controller="settingsController" data-ng-init="init()">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="pathInput">Arma 3 Pfad</label>
+                                    <div class="input-group">
+                                        <input id="pathInput" class="form-control" type="text"
+                                               placeholder="Kein Arma Pfad gesetzt" ng-model="ArmaPath" disabled>
+                                        <span class="input-group-btn">
+                                                <button ng-disabled="downloading" class="btn btn-primary" type="button"
+                                                        ng-click="chooseArmaPath()"><span
+                                                        class="glyphicon glyphicon-open-file"></span></button>
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-inline">
+                                        <label for="splashCheck">Kein Splashscreen</label>
+                                        <span class="pull-right">
+                                                <input id="splashCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="introCheck">Intro überspringen</label>
+                                        <span class="pull-right">
+                                                <input id="introCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="htCheck">Hyper-Threading</label>
+                                        <span class="pull-right">
+                                                <input id="htCheck" type="checkbox">
+                                            </span>
+                                        <hr>
+                                        <label for="windowedCheck">Fenstermodus</label>
+                                        <span class="pull-right">
+                                                <input id="windowedCheck" type="checkbox">
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="memInput">Maximaler RAM</label>
+                                                <input ng-model="mem" ng-change="saveSettings()" id="memInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vmemInput">Maximaler vRam</label>
+                                                <input ng-model="vram" ng-change="saveSettings()" id="vmemInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="cpuInput">CPU Anzahl</label>
+                                                <input ng-model="cpu" ng-change="saveSettings()" id="cpuInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="threadsInput">Extra Threads</label>
+                                                <input ng-model="thread" ng-change="saveSettings()" id="threadsInput"
+                                                       class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="addInput">Eigene Startparameter</label>
+                                                <input ng-model="add_params" ng-change="saveSettings()" id="addInput"
+                                                       class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="progress progress-striped active" ng-if="fileProgress > 0">
-                            <div class="progress-bar" style="width: {{totalProgress}}%;"></div>
-                        </div>
-                    </div>
                     </div>
                 </div>
+                <!--<div id="server" class="tab-pane fade">
+                        <ul class="nav nav-tabs ">
+                                <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
+                                <li><a data-toggle="tab" href="#tstab">Teamspeak Server</a></li>
+                            </ul>
+                        
+                    <div class="tab-pane fade in active", id="armatab" >
+                        <div class="row">
+                            <div  class="col-6" ng-controller="a3Controller">
+                                <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 350px;position: relative;" >
+                                    <li class="list-group-item", ng-repeat="player in players">
+                                        <!-- Das hier muss in die Mitte
+                                        <b>{{ player }}</b>
+
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-4" ng-controller="a3Controller">
+                                <!--Das hier muss rechts an die Seite!
+                                Server Info:
+                                <br>
+                                <b>{{ html.raw.numplayers }} / {{ html.maxplayers }} Spieler sind online </b><br>
+                                <b>IP Adresse:{{ html.query.host }}</b><br>
+                                <b>Port:{{ html.query.port}}</b><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade", id="tstab">
+                            <div class="col-md-4", ng-controller="tsController">
+                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 100px;position: relative;" >
+                                            <li class="list-group-item", ng-repeat="player in players">
+                                                <!-- Das hier muss in die Mitte
+                                                 <b>{{ player }}</b>
+                                                 
+                                            </li>
+                                          </ul>
+                                          <!-- Das hier muss rechts an die Seite!
+                                          Server Info:
+                                          <br>
+                                          <b>{{ html.players.length }} / {{ html.maxplayers }} Spieler sind online</b><br>
+                                          <b>IP Adresse:{{ html.query.host }}</b><br>
+                                          <b>Port:{{html.query.port}}</b><br>
+                                    </div>    
+                            </div>       
+                    </div>     
+                </div>-->
                 <div id="server" class="tab-pane fade">
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
@@ -242,92 +336,7 @@
                         </div>
                     </div>
                 </div>
-                 <div id="settings" class="tab-pane fade">
-                     <div class="container" ng-controller="settingsController" data-ng-init="init()">
-                         <div class="page">
-                             <div class="row">
-                                 <div class="col-md-12">
-                                     <label for="pathInput">Arma 3 Pfad</label>
-                                     <div class="input-group">
-                                         <input id="pathInput" class="form-control" type="text"
-                                                placeholder="Kein Arma Pfad gesetzt" ng-model="ArmaPath" disabled>
-                                         <span class="input-group-btn">
-                                                 <button ng-disabled="downloading" class="btn btn-primary" type="button"
-                                                         ng-click="chooseArmaPath()"><span
-                                                         class="glyphicon glyphicon-open-file"></span></button>
-                                             </span>
-                                     </div>
-                                 </div>
-                             </div>
-                             <hr>
-                             <div class="row">
-                                 <div class="col-md-4">
-                                     <div class="form-group form-inline">
-                                         <label for="splashCheck">Kein Splashscreen</label>
-                                         <span class="pull-right">
-                                                 <input id="splashCheck" type="checkbox">
-                                             </span>
-                                         <hr>
-                                         <label for="introCheck">Intro überspringen</label>
-                                         <span class="pull-right">
-                                                 <input id="introCheck" type="checkbox">
-                                             </span>
-                                         <hr>
-                                         <label for="htCheck">Hyper-Threading</label>
-                                         <span class="pull-right">
-                                                 <input id="htCheck" type="checkbox">
-                                             </span>
-                                         <hr>
-                                         <label for="windowedCheck">Fenstermodus</label>
-                                         <span class="pull-right">
-                                                 <input id="windowedCheck" type="checkbox">
-                                             </span>
-                                     </div>
-                                 </div>
-                                 <div class="col-md-8">
-                                     <div class="row">
-                                         <div class="col-md-6">
-                                             <div class="form-group">
-                                                 <label for="memInput">Maximaler RAM</label>
-                                                 <input ng-model="mem" ng-change="saveSettings()" id="memInput"
-                                                        class="form-control" type="number">
-                                             </div>
-                                             <div class="form-group">
-                                                 <label for="vmemInput">Maximaler vRam</label>
-                                                 <input ng-model="vram" ng-change="saveSettings()" id="vmemInput"
-                                                        class="form-control" type="number">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-6">
-                                             <div class="form-group">
-                                                 <label for="cpuInput">CPU Anzahl</label>
-                                                 <input ng-model="cpu" ng-change="saveSettings()" id="cpuInput"
-                                                        class="form-control" type="number">
-                                             </div>
-                                             <div class="form-group">
-                                                 <label for="threadsInput">Extra Threads</label>
-                                                 <input ng-model="thread" ng-change="saveSettings()" id="threadsInput"
-                                                        class="form-control" type="number">
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row">
-                                         <div class="col-md-12">
-                                             <div class="form-group">
-                                                 <label for="addInput">Eigene Startparameter</label>
-                                                 <input ng-model="add_params" ng-change="saveSettings()" id="addInput"
-                                                        class="form-control" type="text">
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                </div>
                 <div id="about" ng-controller="aboutController" class="tab-pane fade">
-                    <!-- Background video -->
-                    <video autoplay muted loop id="bgVideo"><source src="./resources/video/bg.mp4" type="video/mp4"></video>
                     <div class="row">
                         <div class="col-md-4 centered">
                             <a class="no-deco" href="ts3server://ts.Unity-Life.de ?port=9987">
@@ -360,25 +369,34 @@
                     </div>
                 </div>
             </div>
-         </div>
-     </div>
- </div>
- </body>
- <script>
-   $(document).on('click', 'a[href^="htt"]', function (event) {
-     if (this.href != "") {
-       event.preventDefault();
-       shell.openExternal(this.href);
-     }
-   });
+            <div class="pg-bars">
+                <span class="label label-primary label-large" ng-if="fileName !== ''">{{fileName}}</span>
+                <span class="label label-primary pull-right" ng-if="speed > 0">{{speed}} Mb/s</span>
+                <div class="progress progress-striped active" ng-if="fileProgress > 0 || pgbar > 0">
+                    <div class="progress-bar progress-bar-success" style="width: {{fileProgress}}%;"></div>
+                </div>
+                <div class="progress progress-striped active" ng-if="fileProgress > 0">
+                    <div class="progress-bar" style="width: {{totalProgress}}%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+  $(document).on('click', 'a[href^="htt"]', function (event) {
+    if (this.href != "") {
+      event.preventDefault();
+      shell.openExternal(this.href);
+    }
+  });
 
-   $(document).ready(function () {
-     $('input').iCheck({
-       checkboxClass: 'icheckbox_minimal',
-       radioClass: 'iradio_minimal',
-       increaseArea: '20%' // optional
-     });
-     appLoaded()
-   });
- </script>
- </html>
+  $(document).ready(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_minimal',
+      radioClass: 'iradio_minimal',
+      increaseArea: '20%' // optional
+    });
+    appLoaded()
+  });
+</script>
+</html>

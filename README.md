@@ -8,7 +8,7 @@ Unsere Website, sowie unseren Teamspeak kannst du [hier](https://Unity-Life.de/)
 
 ## credits
 
-Der Paradise-Life Launcher basiert auf [Electron](http://electron.atom.io/) und ist daher eine reine HTML, Javascript und CSS Anwendung.
+Der Unity-Life Launcher basiert auf [Electron](http://electron.atom.io/) und ist daher eine reine HTML, Javascript und CSS Anwendung.
 
 Vielen Dank auch an alle Entwickler der verschiedenen Bibilotheken, eine genaue Liste findet ihr in der `package.json` die Bibilotheken selber auf [NPM](https://www.npmjs.com/)
 
