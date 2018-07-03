@@ -1,0 +1,14 @@
+{
+    "transport": {
+      "module": "ftp",
+      "host": "storage1.gaming-provider.com",
+      "port": 21,
+      "user": "cloud",
+      "password": "DREq3ysNpCcKPhRT4VytzLTJDWRjkyUZC9RsZrRTR3eQyFV65skrt4gs",
+      "secure": true,
+      "secureOptions": {"rejectUnauthorized":false},
+      "remotePath": "/cc/unitylife/updates",
+      "remoteUrl": "https://cloud.coffee-apps.com/cc/unitylife/updates",
+      "updatesJsonPath": "updates.json"
+        }
+    }

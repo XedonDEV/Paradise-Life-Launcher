@@ -32,10 +32,7 @@ ipcRenderer.on('to-dwn', function (event, args) {
     case 'start-mod-update':
       cancel = false
       path = args.path
-      getHashlist(args.mod, 'hashlist-callback-hash')
-      /* Diese ist nur zum test ausgeklammert um das file delete Problem zu lösen
-      getHashlist(args.mod, 'hashlist-callback-update') 
-      */
+      getHashlist(args.mod, 'hashlist-callback-update')
       break
     case 'hashlist-callback-dwn':
       cancel = false
@@ -74,7 +71,7 @@ function dwnlist (args) {
   downloadFileRecursive(args.list, 0, path, args.mod.DownloadUrl)
 }
 
-const updateMod = (args) => {
+function updateMod (args) {
   var dllist = []
   quickCheckRecursiveList(args.data.data, 0, path, dllist, args.args.mod)
 }
@@ -238,7 +235,7 @@ function hashFileRecursive (list, index, basepath, dllist, mod) {
   }
 }
 
-function downloadFinished (args) {
+function downloadFinished () {
   ipcRenderer.send('to-app', {
     type: 'update-dl-progress-done'
   })

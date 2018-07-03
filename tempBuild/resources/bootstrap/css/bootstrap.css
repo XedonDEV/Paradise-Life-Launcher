@@ -3404,7 +3404,6 @@ fieldset[disabled] .btn-danger.focus {
 .btn-link {
   color: #0ce3ac;
   font-weight: normal;
-  border-radius: 0;
 }
 .btn-link,
 .btn-link:active,
@@ -5447,20 +5446,10 @@ button.list-group-item-danger.active:focus {
 }
 .panel {
   margin-bottom: 21px;
-  background-color: #2a2a2a;
-  border: 1px solid transparent;
-  border-radius: 4px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .panel-body {
-  padding: 15px;
-}
-.panel-heading {
-  padding: 10px 15px;
-  border-bottom: 1px solid transparent;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  padding: 100px;
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;
@@ -5480,10 +5469,6 @@ button.list-group-item-danger.active:focus {
 }
 .panel-footer {
   padding: 10px 15px;
-  background-color: #2a2a2a;
-  border-top: 1px solid #464545;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
 }
 .panel > .list-group,
 .panel > .panel-collapse > .list-group {

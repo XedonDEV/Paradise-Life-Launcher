@@ -2,7 +2,7 @@
  * Unity-Life Launcher by Coffee-Apps
  *
  * Email: xedon@arctic-network.com
- * Web: coffee-apps.com
+ * Web: https://coffee-apps.com
  */
 
 const {ipcRenderer} = require('electron')
@@ -16,6 +16,7 @@ const Winreg = require('winreg')
 const $ = window.jQuery = require('./resources/jquery/jquery-1.12.3.min.js')
 const path = require('path')
 const child = require('child_process')
+var api = require('twitch-api-v5')
 
 /* global APIBaseURL APIModsURL alertify angular */
 
@@ -105,6 +106,67 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
     $scope.reload()
   },300)
 })
+
+App.controller('twitchController', function ($scope) {
+  api.clientID = 'uf6fu3f6lry57wa0xuthtwyc4i1i8t';
+  api.search.streams({query: 'unity-life.de'}, (err, res) => {
+      if(err) {
+          console.log(err);
+      } else {
+          console.log(res);
+          $scope.twitch = res.streams;
+          $scope.onlinestreamers = $scope.twitch.length;
+          
+          let streamersname = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersname.push($scope.twitch[i].channel.name);      
+          }
+          $scope.streamersname = streamersname;
+
+          let streamersfps = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersfps.push($scope.twitch[i].average_fps);      
+          }
+          $scope.streamersfps = streamersfps;
+
+          let streamersstatus = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersstatus.push($scope.twitch[i].stream_type);      
+          }
+          $scope.streamersstatus = streamersstatus;
+
+          let streamersmaxhighvideo = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersmaxhighvideo.push($scope.twitch[i].video_height);      
+          }
+          $scope.streamersmaxhighvideo = streamersmaxhighvideo;
+
+          let streamersviewers = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersviewers.push($scope.twitch[i].viewers);      
+          }
+          $scope.streamersviewers = streamersviewers;
+
+          let streamersbanner = [];
+          //ziehe mir die Daten aus der Liste von der API
+          for (var i = 0; i < $scope.onlinestreamers; i++){
+              //speichere die neuen Daten in das zuvor erstelle Array
+              streamersbanner.push($scope.twitch[i].preview.medium);      
+          }
+          $scope.streamersbanner = streamersbanner;
+      };
+  });
+});
 
 App.controller('modController', ['$scope', '$rootScope', function ($scope, $rootScope) {
   $scope.state = 'Gestoppt'

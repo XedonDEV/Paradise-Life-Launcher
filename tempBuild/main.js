@@ -76,8 +76,6 @@ function handleSquirrelEvent () {
       return true
   }
 }
-
-var version = app.getVersion()
 // ------------------------------------------- real stuff that does something ----------------------------------------------------------------
 
 let win
@@ -95,7 +93,7 @@ function createWindows () {
   })
   webWin.loadURL(`file://${__dirname}/app/web.html`)
     webWin.webContents.openDevTools({
-      mode: 'detach'
+    detach: false
   })
 
   // download process
@@ -107,7 +105,7 @@ function createWindows () {
   })
   downWin.loadURL(`file://${__dirname}/app/dwn.html`)
   downWin.webContents.openDevTools({
-    mode: 'detach'
+    detach: false
   })
 
   // Create the browser window.
@@ -115,11 +113,13 @@ function createWindows () {
     icon: 'resources/icon/icon.ico',
     width: 1300,
     height: 700,
+    /*
     minWidth: 1300,
     minHeight: 700,
     maxWidth: 1300,
     maxHeight: 700,
     resizeable: false,
+    */
     show: false,
     frame: false
   }).on('close', () => {
@@ -128,8 +128,9 @@ function createWindows () {
  
 
   win.webContents.openDevTools({
-    mode: 'detach'
+    detach: true
   })
+
 
   win.loadURL(`file://${__dirname}/index.html`)
 
@@ -138,7 +139,7 @@ function createWindows () {
   //})
 
   loadWin = new BrowserWindow({
-    icon: 'resources/icon/icon.ico',
+    icon: 'icon/appicon.ico',
     width: 162,
     height: 162,
     frame: false,

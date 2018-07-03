@@ -81,10 +81,10 @@
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs nav-justified main-nav">
-                <li class="active"><a data-toggle="tab" href="#mods">STARTSEITE</a></li>
-                <li><a data-toggle="tab" href="#server">SERVER</a></li>
-                <li><a id="settingsTab" data-toggle="tab" href="#settings">EINSTELLUNGEN</a></li>
-                <li><a data-toggle="tab" href="#about">INFO</a></li>
+                <li class="active"><a data-toggle="tab" href="#mods">Mods</a></li>
+                <li><a id="settingsTab" data-toggle="tab" href="#settings">Einstellungen</a></li>
+                <li><a data-toggle="tab" href="#server">Server</a></li>
+                <li><a data-toggle="tab" href="#about">Info</a></li>
             </ul>
             <div class="tab-content main-content">
                 <div id="mods" class="tab-pane fade in active" ng-controller="modController" data-ng-init="init()">
@@ -106,7 +106,7 @@
                                                         <h4 class="margin-none">{{mod.Name}}</h4>
                                                     </div>
                                                     <div class="panel-body">
-                                                        <div class="modImg img-thumbnail"></div>
+                                                        <img ng-src="{{mod.ImageUrl}}" class="modImg img-thumbnail">
                                                         <hr>
                                                         {{mod.Description}}
                                                     </div>
@@ -122,7 +122,10 @@
                                                                     ng-click="initHash(mod)" ng-disabled="downloading">
                                                                 Prüfen
                                                             </button>
-                                                            <button class="btn btn-success btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="openModDir(mod)"><span class=" glyphicon glyphicon-folder-open"></span></button>
+                                                            <button class="btn btn-danger btn-sm" ng-click="refresh()"
+                                                                    ng-disabled="downloading || mod.state[0] == 0"><i
+                                                                    class="fa fa-folder" aria-hidden="true"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -138,18 +141,19 @@
                         <div class="col-lg-4">
                             <ul class="list-group list-group-unbordered margin-none">
                                 <li class="list-group-item">
-                                    <b>Download-Status: </b> <a class="pull-right"><span tooltips tooltip-template="{{hint}}">{{state}}</span></a>
+                                    <b>Download-Status</b> <a class="pull-right"><span tooltips tooltip-template="{{hint}}">{{state}}</span></a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Download: </b> <a class="pull-right"><span tooltips
-                                                                                tooltip-template="Download Geschwindigkeit">{{speed}} MB/s</span></a>
+                                <li class="list-group-item" ng-if="downloading && downSpeed > 0">
+                                    <b>Download</b> <a class="pull-right"><span tooltips
+                                                                                tooltip-template="Download Geschwindigkeit">{{downSpeed}} Mb/s</span></a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Heruntergeladen: </b> <a class="pull-right">{{totalDownloaded}} GB/{{totalSize}}GB</a>
+                                <li class="list-group-item" ng-if="totalSize > 0">
+                                    <b>Heruntergeladen</b> <a class="pull-right">{{totalDownloaded}} GB/{{totalSize}}
+                                    GB</a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Verbleibend: </b> <a class="pull-right"><span tooltips
-                                                                                   tooltip-template="Verbleibende Zeit">{{totalETA}}</span></a>
+                                <li class="list-group-item" ng-if="totalETA !== ''">
+                                    <b>Verbleibend</b> <a class="pull-right"><span tooltips
+                                                                                   tooltip-template="Zeit verbleibend">{{totalETA}}</span></a>
                                 </li>
                             </ul>
                             <br>
@@ -241,25 +245,18 @@
                         </div>
                     </div>
                 </div>
-                <!--<div id="server" class="tab-pane fade">
-                        <ul class="nav nav-tabs ">
-                                <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
-                                <li><a data-toggle="tab" href="#tstab">Teamspeak Server</a></li>
-                            </ul>
-                        
-                    <div class="tab-pane fade in active", id="armatab" >
+                <div id="server" class="tab-pane fade">
+                    <div class="container">
                         <div class="row">
-                            <div  class="col-6" ng-controller="a3Controller">
-                                <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 350px;position: relative;" >
-                                    <li class="list-group-item", ng-repeat="player in players">
-                                        <!-- Das hier muss in die Mitte
-                                        <b>{{ player }}</b>
-
-                                    </li>
-                                </ul>
+                            <div class="col-md-7" ng-controller="a3Controller">
+                                    <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 450px;position: relative;" >
+                                        <li class="list-group-item">
+                                            <!-- Das hier muss in die Mitte-->
+                                            <b>{{ player }}</b>
+                                        </li>
+                                    </ul>
                             </div>
-                            <div class="col-4" ng-controller="a3Controller">
-                                <!--Das hier muss rechts an die Seite!
+                            <div class="col-md-4" ng-controller="a3Controller">
                                 Server Info:
                                 <br>
                                 <b>{{ html.raw.numplayers }} / {{ html.maxplayers }} Spieler sind online </b><br>
@@ -268,119 +265,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade", id="tstab">
-                            <div class="col-md-4", ng-controller="tsController">
-                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 100px;position: relative;" >
-                                            <li class="list-group-item", ng-repeat="player in players">
-                                                <!-- Das hier muss in die Mitte
-                                                 <b>{{ player }}</b>
-                                                 
-                                            </li>
-                                          </ul>
-                                          <!-- Das hier muss rechts an die Seite!
-                                          Server Info:
-                                          <br>
-                                          <b>{{ html.players.length }} / {{ html.maxplayers }} Spieler sind online</b><br>
-                                          <b>IP Adresse:{{ html.query.host }}</b><br>
-                                          <b>Port:{{html.query.port}}</b><br>
-                                    </div>    
-                            </div>       
-                    </div>     
-                </div>-->
-                <div id="server" class="tab-pane fade">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#armatab">Arma Server</a></li>
-                        <li><a data-toggle="tab" href="#tstab">Teamspeak Server</a></li>
-                    </ul>
-                    <div class="row">
-                        <div class="tab-pane fade in active" id="armatab">
-                                <div class="col-md-7" ng-controller="a3Controller">
-                                        <h4 class="onlineplayers">Online Spieler:</h4><br>
-                                    <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
-                                        <li class="list-group-item", ng-repeat="player in players"><b>{{ player }}</b></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4" ng-controller="a3Controller">
-                                    <br>
-                                    <h4 class="serverinfo">Server Info:</h4>
-                                    <hr>
-
-                                    <b>{{ armahtml.raw.numplayers }} von {{ armahtml.maxplayers }} Spieler sind online </b>
-                                    <hr>
-                                    <b>IP Adresse: {{ armahtml.query.host }}</b>
-                                    <hr>
-                                    <b>Port: {{ armahtml.query.port }}</b>
-                                    <hr>
-                                </div>
-                        </div>
-                        <div class="tab-pane fade" id="tstab">
-                                <div class="col-md-7" ng-controller="tsController">
-                                        <h4 class="onlineplayers">Online Spieler:</h4><br>
-        
-                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
-                                        <li class="list-group-item", ng-repeat="player in players">
-                                            <b>{{ player }}</b></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4" ng-controller="tsController">
-                                    <br>
-                                    <h4 class="serverinfo">Server Info:</h4>
-                                    <hr>
-                                    <b>{{ tshtml.players.length }} von {{ tshtml.maxplayers }} Spieler sind online</b>
-                                    <hr>
-                                    <b>IP Adresse: {{ tshtml.query.host }}</b>
-                                    <hr>
-                                    <b>Port: {{ tshtml.query.port }}</b>
-                                    <hr>
-                                </div>
-                        </div>
+                </div>
+                <div id="about" class="tab-pane fade">
+                    <div class="container" ng-controller="aboutController">
+                        Test2
                     </div>
                 </div>
-                <div id="about" ng-controller="aboutController" class="tab-pane fade">
-                    <div class="row">
-                        <div class="col-md-4 centered">
-                            <a class="no-deco" href="ts3server://ts.Unity-Life.de ?port=9987">
-                                <img src="resources/icon/teamspeak.png">
-                            </a>
-                            <br>
-                            <h4><a href="ts3server://ts.Unity-Life.de ?port=9987">Teamspeak 3</a></h4>
-                        </div>
-                        <div class="col-md-4 centered">
-                            <a class="no-deco" href="https://unity-life.de/index.php?board-list/">
-                                <img src="resources/icon/forum.png">
-                            </a>
-                            <br>
-                            <h4><a href="https://unity-life.de/index.php?board-list/">Forum</a></h4>
-                        </div>
-                        <div class="col-md-4 centered">
-                            <a class="no-deco" href="https://unity-life.de/index.php?board-list/">
-                                <img src="resources/icon/web.png">
-                            </a>
-                            <br>
-                            <h4><a href="https://unity-life.de">Website</a></h4>
-                        </div>
+                <div class="pg-bars">
+                    <span class="label label-primary label-large" ng-if="fileName !== ''">{{fileName}}</span>
+                    <span class="label label-primary pull-right" ng-if="speed > 0">{{speed}} Mb/s</span>
+                    <div class="progress progress-striped active" ng-if="fileProgress > 0">
+                        <div class="progress-bar progress-bar-success" style="width: {{fileProgress}}%;"></div>
                     </div>
-                    <hr>
-                    <div class="col-md-12 centered">
-                        <h5>Unity-Life Launcher v{{version}}</h5>
-                        <h8>Entwickelt durch</h8><br>
-                        <h8> <a href="https://Coffee-Apps.com">Coffee-Apps.com</a></h8><br>
-                        <h8>©2018 <a href="https://Coffee-Apps.com">Coffee-Apps.com</a></h8>
+                    <div class="progress progress-striped active" ng-if="fileProgress > 0">
+                        <div class="progress-bar" style="width: {{totalProgress}}%;"></div>
                     </div>
-                </div>
-            </div>
-            <div class="pg-bars">
-                <span class="label label-primary label-large" ng-if="fileName !== ''">{{fileName}}</span>
-                <span class="label label-primary pull-right" ng-if="speed > 0">{{speed}} Mb/s</span>
-                <div class="progress progress-striped active" ng-if="fileProgress > 0 || pgbar > 0">
-                    <div class="progress-bar progress-bar-success" style="width: {{fileProgress}}%;"></div>
-                </div>
-                <div class="progress progress-striped active" ng-if="fileProgress > 0">
-                    <div class="progress-bar" style="width: {{totalProgress}}%;"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script>
   $(document).on('click', 'a[href^="htt"]', function (event) {
@@ -400,3 +304,17 @@
   });
 </script>
 </html>
+
+<!--
+<ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 350px;position: relative;" >
+    <li class="list-group-item", ng-repeat="player in players">
+        <b>{{ player }}</b>
+    </li>
+</ul>
+
+Server Info:
+<br>
+<b>{{ html.players.length }} / {{ html.maxplayers }} Spieler sind online</b><br>
+<b>IP Adresse:{{ html.query.host }}</b><br>
+<b>Port:{{html.query.port}}</b><br>
+-->
