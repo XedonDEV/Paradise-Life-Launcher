@@ -83,6 +83,7 @@
             <ul class="nav nav-tabs nav-justified main-nav">
                 <li class="active"><a data-toggle="tab" href="#mods">STARTSEITE</a></li>
                 <li><a data-toggle="tab" href="#server">SERVER</a></li>
+                <li><a data-toggle="tab" href="#twitch">TWITCH</a></li>
                 <li><a id="settingsTab" data-toggle="tab" href="#settings">EINSTELLUNGEN</a></li>
                 <li><a data-toggle="tab" href="#about">INFO</a></li>
             </ul>
@@ -156,6 +157,37 @@
                             <button class="btn btn-danger btn-sm pull-right" ng-click="cancel()" ng-if="downloading">
                                 Abbrechen <i class="fa fa-times"></i></button>
                         </div>
+                    </div>
+                </div>
+                <div id="twitch" class="tab-pane fade">
+                    <div class="row" ng-controller="twitchController">
+                        <h4 class="onlinestreamers">Online Streamers: {{ onlinestreamers }} </h4><br>
+                        <ul>
+                            <h1>Streamer Name:</h1>
+                            <li ng-repeat="streamername in streamersname">
+                                <b> {{ streamername }}</b>
+                            </li>
+                            <h1>Streamer FPS Avg</h1>
+                            <li ng-repeat="streamerfps in streamersfps">
+                                    <b> {{ streamerfps }}</b>
+                            </li>
+                            <h1>Stream Status</h1>
+                            <li ng-repeat="streamerstatus in streamersstatus">
+                                    <b> {{ streamerstatus }}</b>
+                            </li>
+                            <h1>max Auflösung</h1>
+                            <li ng-repeat="streamerhighvideo in streamershighvideo">
+                                    <b> {{ streamerhighvideo }}</b>
+                            </li>
+                            <h1>Zuschauer</h1>
+                            <li ng-repeat="streamerviewer in streamersviewers">
+                                    <b> {{ streamerviewer }}</b>
+                            </li>
+                            <h1>preview banner</h1>
+                            <li ng-repeat="streamerbanner in streamersbanner">
+                                    <b> {{ streamerbanner }}</b>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div id="settings" class="tab-pane fade">
@@ -326,7 +358,7 @@
                                     <br>
                                     <h4 class="serverinfo">Server Info:</h4>
                                     <hr>
-                                    <b>{{ tshtml.players.length }} von {{ tshtml.maxplayers }} Spieler sind online</b>
+                                    <b>{{ tshtml.raw.virtualserver_clientsonline }} von {{ tshtml.maxplayers }} Spieler sind online</b>
                                     <hr>
                                     <b>IP Adresse: {{ tshtml.query.host }}</b>
                                     <hr>

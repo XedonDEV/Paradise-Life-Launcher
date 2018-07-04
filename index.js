@@ -16,6 +16,7 @@ const Winreg = require('winreg')
 const $ = window.jQuery = require('./resources/jquery/jquery-1.12.3.min.js')
 const path = require('path')
 const child = require('child_process')
+const twitchapi = require('twitch-api-v5');
 
 /* global APIBaseURL APIModsURL alertify angular */
 
@@ -62,7 +63,7 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
 
     $http.get('https://api.coffee-apps.com/unitylife/ts3server/').then(function(list) {
       //gehe zu ganze liste --> data --> data --> players
-      console.log(list.data)
+      console.log('ts3server query' + list.data)
       $scope.tshtml = list.data.data;
       $scope.tsserver = list.data.data.players;
       //erstelle neues Array für die Spieler Namen
@@ -75,10 +76,13 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
       //speichere die fertige Liste unter $scope.players die in der html dann aufgerufen wird
       $scope.players = allplayers;
   });
-  };
-  $timeout(function(){
+    $timeout(function(){
     $scope.reload();
-  },300)
+    //reload every 5min
+  },120000)
+  };
+  $scope.reload();
+  $scope.refreshtime
 })
       
 //setze App Controller für den A3 Server
@@ -88,6 +92,7 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
 
     $http.get('https://api.coffee-apps.com/unitylife/a3server/').then(function(list) {
       //gehe zu ganze liste --> data --> data --> players
+      console.log('a3server query' + list.data)
       $scope.armahtml = list.data.data
       $scope.a3server = list.data.data.players;
       //erstelle neues Array für die Spieler Namen
@@ -100,11 +105,38 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
       //speichere die fertige Liste unter $scope.players die in der html dann aufgerufen wird
       $scope.players = allplayers;
   });
-  };
-  $timeout(function(){
+    $timeout(function(){
     $scope.reload()
-  },300)
+    //reload every 5min
+  },120000)
+  };
+  $scope.reload();
 })
+
+//sete App Controller für Twitch
+App.controller('twitchController', function($scope, $timeout){
+  //auto reload
+  $scope.reload = function () {
+      //wird benötigt ansonsten können keine Daten abgerufen werden
+  twitchapi.clientID = 'uf6fu3f6lry57wa0xuthtwyc4i1i8t';
+  //suche nach "unity-life.de" im Titel von allen Twitch Livestreams
+  twitchapi.search.streams({query: 'unity-life.de'}, (err, res) => {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(res);
+      //twitch titel query (alle aktiven streams)
+      $scope.twtq = res.streams;
+
+    }
+  })
+  }; 
+    $timeout(function(){
+    $scope.reload()
+    //reload every 5min
+  },120000)
+  $scope.reload();
+});
 
 App.controller('modController', ['$scope', '$rootScope', function ($scope, $rootScope) {
   $scope.state = 'Gestoppt'
