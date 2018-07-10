@@ -17,6 +17,7 @@ const $ = window.jQuery = require('./resources/jquery/jquery-1.12.3.min.js')
 const path = require('path')
 const child = require('child_process')
 const twitchapi = require('twitch-api-v5');
+var Chart = require('chart.js');
 
 /* global APIBaseURL APIModsURL alertify angular */
 
@@ -75,6 +76,8 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
       }
       //speichere die fertige Liste unter $scope.players die in der html dann aufgerufen wird
       $scope.players = allplayers;
+      var d = new Date();
+      $scope.unixtimestamp = d.getHours() + ':' + d.getMinutes(); 
   });
     $timeout(function(){
     $scope.reload();
@@ -104,6 +107,48 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
       }
       //speichere die fertige Liste unter $scope.players die in der html dann aufgerufen wird
       $scope.players = allplayers;
+      var d = new Date();
+      $scope.unixtimestamp = d.getHours() + ':' + d.getMinutes(); 
+      
+  });
+    $http.get('https://unity-life.de/redirect/anzeige2.php').then(function(list) {
+      //gehe zu ganze liste --> data --> data --> players
+      console.log(list.data)
+      $scope.all = list.data.Gesamt
+      $scope.civilians = list.data.Civilians;
+      console.log($scope.civilians )
+      $scope.firedepartment = list.data.FireDepartment;
+      $scope.policedepartment = list.data.PoliceDepartment;
+      $scope.departmentofjustice = list.data.DepartmentofJustice;
+    playersChart = new Chart($('#playersChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Civilians', 'FireDepartment', 'PoliceDepartment', 'DepartmentofJustice'],
+      datasets: [
+        {
+          data:[$scope.civilians, $scope.firedepartment, $scope.policedepartment, $scope.departmentofjustice],
+          backgroundColor: [
+            '#7D31B2',
+            '#740505',
+            '#0099CC',
+            '#310C0C'
+          ]
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      legend: {
+        position: 'buttom'
+      },
+      animation: {
+        animateScale: true
+      },
+      tooltips: {
+        displayColors: false
+      }
+    }
+  });
   });
     $timeout(function(){
     $scope.reload()
@@ -120,16 +165,28 @@ App.controller('twitchController', function($scope, $timeout){
       //wird benötigt ansonsten können keine Daten abgerufen werden
   twitchapi.clientID = 'uf6fu3f6lry57wa0xuthtwyc4i1i8t';
   //suche nach "unity-life.de" im Titel von allen Twitch Livestreams
-  twitchapi.search.streams({query: 'unity-life.de'}, (err, res) => {
-    if(err) {
+  //suche alle Twitch Partner ID's raus
+  twitchapi.teams.getTeam({team: 'unitylifede'}, (err, res) => {
+    if (err) {
       console.log(err);
     } else {
       console.log(res);
-      //twitch titel query (alle aktiven streams)
-      $scope.twtq = res.streams;
-
+      $scope.data = res;
+      $scope.teamusers = $scope.data.users;
     }
   })
+  twitchapi.search.streams({query: 'unity-life.de'}, (err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(res);
+      $scope.data = res;
+      $scope.twtqs = $scope.data.streams;
+      console.log($scope.twtqs)
+    }
+  })
+  var d = new Date();
+  $scope.unixtimestamp = d.getHours() + ':' + d.getMinutes(); 
   }; 
     $timeout(function(){
     $scope.reload()
