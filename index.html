@@ -161,34 +161,42 @@
                 </div>
                 <div id="twitch" class="tab-pane fade">
                     <div class="row" ng-controller="twitchController">
-                        <h4 class="onlinestreamers">Online Streamers: {{ onlinestreamers }} </h4><br>
-                        <ul>
-                            <h1>Streamer Name:</h1>
-                            <li ng-repeat="streamername in streamersname">
-                                <b> {{ streamername }}</b>
-                            </li>
-                            <h1>Streamer FPS Avg</h1>
-                            <li ng-repeat="streamerfps in streamersfps">
-                                    <b> {{ streamerfps }}</b>
-                            </li>
-                            <h1>Stream Status</h1>
-                            <li ng-repeat="streamerstatus in streamersstatus">
-                                    <b> {{ streamerstatus }}</b>
-                            </li>
-                            <h1>max Auflösung</h1>
-                            <li ng-repeat="streamerhighvideo in streamershighvideo">
-                                    <b> {{ streamerhighvideo }}</b>
-                            </li>
-                            <h1>Zuschauer</h1>
-                            <li ng-repeat="streamerviewer in streamersviewers">
-                                    <b> {{ streamerviewer }}</b>
-                            </li>
-                            <h1>preview banner</h1>
-                            <li ng-repeat="streamerbanner in streamersbanner">
-                                    <b> {{ streamerbanner }}</b>
-                            </li>
-                        </ul>
-                    </div>
+                        <h3>Twitch Streamer's</h3>
+                        <b>letztes update: {{ unixtimestamp }} Uhr</b>
+                        <hr>
+                        <h4>Online</h4>
+                        <hr>
+                        <div class="row">
+                                <div class="col-md-4" ng-repeat="twtq in twtqs" >
+                                    <div class="panel panel-primary" ng-repeat="teamuser in teamusers" ng-if="twtq.channel.name === teamuser.name">
+                                        <div class="panel panel-heading panel-head-nomargin">
+                                            <a class="white" href="{{twtq.channel.url}}" target="_blank"><span ng-if="twtq.average_fps > 25">... </span></a> <a class="white" href="{{twtq.channel.url}}" target="_blank"><span class="pull-right label label-success" >{{twtq.channel.display_name}} <i class="fa fa-twitch" aria-hidden="true"></i></span></a>
+                                        </div>
+                                        <div class="panel panel-body center">
+                                            <a class="white" href="{{twtq.channel.url}}" target="_blank"><img ng-src="{{twtq.preview.large}}" height="187" width="333"></a>
+                                            <hr>
+                                            <a class="white" href="{{twtq.channel.url}}" target="_blank"><span class="label label-info label-large">{{twtq.average_fps}}FPS@{{twtq.video_height}}p für {{twtq.viewers}} Zuschauer</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                             <h4>Offline</h4>
+                             <hr>
+                             <div class="row">
+                                     <div class="col-md-4" ng-repeat="teamuser in teamusers" ng-repeat="twtq in twtqs"  >
+                                         <div class="panel panel-primary" ng-if="twtq.channel.name === undefined">
+                                             <div class="panel panel-heading panel-head-nomargin">
+                                                 <a class="white" href="{{teamuser.url}}" target="_blank"><span class="pull-right label label-success" >{{teamuser.name}} <i class="fa fa-twitch" aria-hidden="true"></i></span></a>
+                                             </div>
+                                             <div class="panel panel-body center">
+                                                 <a class="white" href="{{teamuser.url}}" target="_blank"><img ng-src="{{teamuser.video_banner}}" height="187" width="333"></a>
+                                                 <hr>
+                                                 <a class="white" href="{{teamuser.url}}" target="_blank"></a>
+                                             </div>
+                                         </div>
+                                     </div>
+                        </div>   
+                    </div>             
                 </div>
                 <div id="settings" class="tab-pane fade">
                     <div class="container" ng-controller="settingsController" data-ng-init="init()">
@@ -343,6 +351,12 @@
                                     <hr>
                                     <b>Port: {{ armahtml.query.port }}</b>
                                     <hr>
+                                    <b>letztes update: {{ unixtimestamp }} Uhr</b>
+                                    <hr>
+                                </div>
+                                <div class="col-md-4">
+                                    <h3>Chart</h3>
+                                    <canvas id="playersChart" width="400" height="400"></canvas>
                                 </div>
                         </div>
                         <div class="tab-pane fade" id="tstab">
@@ -363,6 +377,8 @@
                                     <b>IP Adresse: {{ tshtml.query.host }}</b>
                                     <hr>
                                     <b>Port: {{ tshtml.query.port }}</b>
+                                    <hr>
+                                    <b>letztes update: {{ unixtimestamp }} Uhr</b>
                                     <hr>
                                 </div>
                         </div>
