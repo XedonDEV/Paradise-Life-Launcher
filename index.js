@@ -53,7 +53,7 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
 
   ipcRenderer.on('update-available', function (event) {
     spawnNotification('Update verfügbar, wird geladen...')
-    $rootScope.updating = true
+    $rootScope.updating = false
   })
 })
 
@@ -64,7 +64,7 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
 
     $http.get('https://api.coffee-apps.com/unitylife/ts3server/').then(function(list) {
       //gehe zu ganze liste --> data --> data --> players
-      console.log('ts3server query' + list.data)
+      //console.log('ts3server query' + list.data)
       $scope.tshtml = list.data.data;
       $scope.tsserver = list.data.data.players;
       //erstelle neues Array für die Spieler Namen
@@ -82,7 +82,7 @@ var App = angular.module('App', ['720kb.tooltips']).run(function ($rootScope) {
     $timeout(function(){
     $scope.reload();
     //reload every 5min
-  },120000)
+  },300000)
   };
   $scope.reload();
   $scope.refreshtime
@@ -95,7 +95,7 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
 
     $http.get('https://api.coffee-apps.com/unitylife/a3server/').then(function(list) {
       //gehe zu ganze liste --> data --> data --> players
-      console.log('a3server query' + list.data)
+      //console.log('a3server query' + list.data)
       $scope.armahtml = list.data.data
       $scope.a3server = list.data.data.players;
       //erstelle neues Array für die Spieler Namen
@@ -113,10 +113,10 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
   });
     $http.get('https://unity-life.de/redirect/anzeige2.php').then(function(list) {
       //gehe zu ganze liste --> data --> data --> players
-      console.log(list.data)
+      //console.log(list.data)
       $scope.all = list.data.Gesamt
       $scope.civilians = list.data.Civilians;
-      console.log($scope.civilians )
+      //console.log($scope.civilians )
       $scope.firedepartment = list.data.FireDepartment;
       $scope.policedepartment = list.data.PoliceDepartment;
       $scope.departmentofjustice = list.data.DepartmentofJustice;
@@ -153,7 +153,7 @@ App.controller('a3Controller', function ($scope, $http, $timeout) {
     $timeout(function(){
     $scope.reload()
     //reload every 5min
-  },120000)
+  },300000)
   };
   $scope.reload();
 })
@@ -170,7 +170,7 @@ App.controller('twitchController', function($scope, $timeout){
     if (err) {
       console.log(err);
     } else {
-      console.log(res);
+      //console.log(res);
       $scope.data = res;
       $scope.teamusers = $scope.data.users;
     }
@@ -179,7 +179,7 @@ App.controller('twitchController', function($scope, $timeout){
     if (err) {
       console.log(err);
     } else {
-      console.log(res);
+      //console.log(res);
       $scope.data = res;
       $scope.twtqs = $scope.data.streams;
       console.log($scope.twtqs)
@@ -191,9 +191,40 @@ App.controller('twitchController', function($scope, $timeout){
     $timeout(function(){
     $scope.reload()
     //reload every 5min
-  },120000)
+  },300000)
   $scope.reload();
 });
+
+//map Controller
+App.controller('mapController', function($scope, $timeout){
+  $scope.init = () => {
+    mapLink = '<a href="https://unity-life.de">Unity-Life.de</a>';
+    var nongridmap = L.tileLayer('https://webstorage1.gaming-provider.com/Projekte/Unity-Life/static/leaflet/nongridsat/{z}/{x}/{y}.png', {  
+    minZoom: 2, 
+    maxZoom: 6, 
+    attribution: '&copy; ' + mapLink, 
+    tms: true 
+    });
+    var gridmap = L.tileLayer('https://webstorage1.gaming-provider.com/Projekte/Unity-Life/static/leaflet/sat/{z}/{x}/{y}.png', {  
+    minZoom: 2, 
+    maxZoom: 6, 
+    attribution: '&copy; ' + mapLink, 
+    tms: true
+    });
+    var map = L.map('leaflet', { 
+    zoomAnimation: true,
+    layers: [nongridmap, gridmap] 
+    }).setView([0, 0], 4);
+    var baseLayers = { 
+    "Karte (mit raster)": gridmap,
+    "Karte (ohne raster": nongridmap
+    };
+    L.control.layers(baseLayers).addTo(map);
+    var southWest = map.unproject([0, 16384], map.getMaxZoom());  
+    var northEast = map.unproject([16384, 0], map.getMaxZoom());  
+    map.setMaxBounds(new L.LatLngBounds(southWest, northEast));
+  }
+})
 
 App.controller('modController', ['$scope', '$rootScope', function ($scope, $rootScope) {
   $scope.state = 'Gestoppt'
@@ -775,10 +806,10 @@ function appLoaded () { // eslint-disable-line
   ipcRenderer.send('app-loaded')
 }
 
-ipcRenderer.on('update-downloaded', function (event, args) {
-  spawnNotification('Update ' + args.releaseName + ' bereit.')
+ipcRenderer.on('update-downloaded', function (event, meta) {
+  spawnNotification('Update ' + meta.version + ' bereit.')
   alertify.set({labels: {ok: 'Update', cancel: 'Abbrechen'}})
-  alertify.confirm('Update zur Version ' + args.releaseName + ' bereit.', function (e) {
+  alertify.confirm('Update zur Version ' + meta.version + ' bereit.', function (e) {
     if (e) {
       ipcRenderer.send('restart-update')
     }

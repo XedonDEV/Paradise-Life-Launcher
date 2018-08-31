@@ -42,8 +42,12 @@
 
     <!-- custom css/js -->
     <link rel="stylesheet" href="resources/css/custom.css">
-
     <script type="text/javascript" src="index.js"></script>
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" integrity="sha256-LcmP8hlMTofQrGU6W2q3tUnDnDZ1QVraxfMkP060ekM=" crossorigin="anonymous" />
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+
 </head>
 <body>
 <div id="app">
@@ -83,7 +87,8 @@
             <ul class="nav nav-tabs nav-justified main-nav">
                 <li class="active"><a data-toggle="tab" href="#mods">STARTSEITE</a></li>
                 <li><a data-toggle="tab" href="#server">SERVER</a></li>
-                <li><a data-toggle="tab" href="#twitch">TWITCH</a></li>
+               <!-- <li><a data-toggle="tab" href="#map">MAP</a></li>-->
+               <!-- <li><a data-toggle="tab" href="#twitch">TWITCH</a></li> -->
                 <li><a id="settingsTab" data-toggle="tab" href="#settings">EINSTELLUNGEN</a></li>
                 <li><a data-toggle="tab" href="#about">INFO</a></li>
             </ul>
@@ -336,7 +341,7 @@
                         <div class="tab-pane fade in active" id="armatab">
                                 <div class="col-md-7" ng-controller="a3Controller">
                                         <h4 class="onlineplayers">Online Spieler:</h4><br>
-                                    <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
+                                    <ul id="playerScroll"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative" >
                                         <li class="list-group-item", ng-repeat="player in players"><b>{{ player }}</b></li>
                                     </ul>
                                 </div>
@@ -354,16 +359,16 @@
                                     <b>letztes update: {{ unixtimestamp }} Uhr</b>
                                     <hr>
                                 </div>
-                                <div class="col-md-4">
+                                <!--<div class="serverchart">
                                     <h3>Chart</h3>
                                     <canvas id="playersChart" width="400" height="400"></canvas>
-                                </div>
+                                </div>-->
                         </div>
                         <div class="tab-pane fade" id="tstab">
                                 <div class="col-md-7" ng-controller="tsController">
                                         <h4 class="onlineplayers">Online Spieler:</h4><br>
         
-                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative;" >
+                                    <ul id="playerScrollb"  class="list-group list-group-unbordered margin-none" style="height: 400px;position: relative" >
                                         <li class="list-group-item", ng-repeat="player in players">
                                             <b>{{ player }}</b></li>
                                     </ul>
@@ -381,6 +386,15 @@
                                     <b>letztes update: {{ unixtimestamp }} Uhr</b>
                                     <hr>
                                 </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="map" class="tab-pane fade" ng-controller="mapController" data-ng-init="init()">
+                    <div class="row">
+                        <h3>Unity-Life Map</h3>
+                        <hr>
+                    <div class="col-md-4 centered">
+                            <div id="leaflet" class="leaflet"></div>
                         </div>
                     </div>
                 </div>

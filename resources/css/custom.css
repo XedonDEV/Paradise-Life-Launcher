@@ -296,5 +296,15 @@ alertify
     color: #3ecbb8;
 }
 .serverinfo{
-    color: #529ecb
+    color: #529ecb;
+    position: relative
+}
+.chart{
+    position: relative;
+}
+.leaflet {
+    height: 450px;
+    width: 1120px;
+    background-color: #445a71;
+    position: fixed
 }
