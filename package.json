@@ -1,6 +1,6 @@
 {
   "name": "Unity-Life",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Unity-Life Launcher",
   "homepage": "https://unity-life.de",
   "author": "Coffee-Apps.com",
@@ -21,12 +21,13 @@
     "appId": "unity-life.cc.coffee-apps.com",
     "copyright": "Copyright ©2018 Coffee-Apps.com",
     "win": {
+      "publisherName": "Coffee-Apps.com",
       "certificateFile": "./cert/codesign/my_signing_key.pfx",
       "certificatePassword": "wrAFV9ewEjHfcMxdsS98CQgJdV28aMYnJnzHTYJBqpwrxN9WuKbFXkdMsBWD",
       "target": "squirrel"
     },
     "squirrelWindows": {
-      "loadingGif": "./rescources/install.gif",
+      "loadingGif": "./resources/loading/install.gif",
       "iconUrl": "https://webstorage1.gaming-provider.com/dwcentral/ParadiseLife/static/icon.ico"
     }
   },
@@ -35,9 +36,9 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "^2.0.3",
-    "electron-builder": "^20.19.0",
-    "electron-builder-squirrel-windows": "^20.2.0",
+    "electron": "^2.0.8",
+    "electron-builder": "^20.28.3",
+    "electron-builder-squirrel-windows": "^20.28.3",
     "electron-simple-publisher": "^0.4.9",
     "eslint": "^3.12.2",
     "eslint-config-standard": "^6.2.1",
@@ -45,7 +46,7 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-react": "^6.8.0",
     "eslint-plugin-standard": "^2.0.1",
-    "standard": "*"
+    "standard": "^12.0.1"
   },
   "contributors": [
     {
@@ -56,12 +57,12 @@
   ],
   "dependencies": {
     "alertify": "^0.3.0",
-    "angular": "^1.6.0",
+    "angular": "^1.7.3",
     "angular-tooltips": "^1.1.8",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.2",
     "electron-json-storage": "^2.1.0",
-    "electron-simple-updater": "^1.2.3",
+    "electron-simple-updater": "^1.2.4",
     "electron-squirrel-startup": "1.0.0",
     "font-awesome": "^4.7.0",
     "get-json": "^1.0.0",
@@ -70,11 +71,12 @@
     "icheck": "^1.0.2",
     "jquery": "^3.1.1",
     "jsonist": "^1.3.0",
+    "leaflet": "^1.3.4",
     "mkpath": "1.0.0",
     "path": "^0.12.7",
     "perfect-scrollbar": "^0.6.15",
     "progress-stream": "1.2.0",
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "request-progress": "^3.0.0",
     "tether": "^1.4.0",
     "twitch-api-v5": "^2.0.3",

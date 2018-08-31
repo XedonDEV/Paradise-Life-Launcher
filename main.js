@@ -1,6 +1,7 @@
+'use strict'
 const {app} = require('electron')
 if (require('electron-squirrel-startup')) app.quit()
-const updater = require('electron-simple-updater');
+const updater = require('electron-simple-updater')
 const path = require('path')
 //const autoUpdater = require('electron').autoUpdater
 const BrowserWindow = require('electron').BrowserWindow
@@ -10,8 +11,7 @@ const {ipcMain} = require('electron')
 updater.init({
   checkUpdateOnStart: true,
   autoDownload: true
-});
-
+})
 
 if (handleSquirrelEvent()) app.quit()
 
@@ -77,7 +77,6 @@ function handleSquirrelEvent () {
   }
 }
 
-var version = app.getVersion()
 // ------------------------------------------- real stuff that does something ----------------------------------------------------------------
 
 let win
@@ -94,9 +93,9 @@ function createWindows () {
     show: false
   })
   webWin.loadURL(`file://${__dirname}/app/web.html`)
-    webWin.webContents.openDevTools({
+    /*webWin.webContents.openDevTools({
       mode: 'detach'
-  })
+  })*/
 
   // download process
   downWin = new BrowserWindow({
@@ -106,9 +105,9 @@ function createWindows () {
     show: false
   })
   downWin.loadURL(`file://${__dirname}/app/dwn.html`)
-  downWin.webContents.openDevTools({
-    mode: 'detach'
-  })
+    /*downWin.webContents.openDevTools({
+      mode: 'detach'
+  })*/
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -125,17 +124,28 @@ function createWindows () {
   }).on('close', () => {
     app.quit()
   })
- 
-
+  /*
   win.webContents.openDevTools({
     mode: 'detach'
-  })
+  })*/
 
   win.loadURL(`file://${__dirname}/index.html`)
 
-  //autoUpdater.addListener('update-available', function (event) {
-  //  win.webContents.send('update-available')
-  //})
+  updater.addListener('checking-for-update', function (event) {
+    win.webContents.send('checking-for-update')
+  })
+
+  updater.addListener('update-not-available', function (event) {
+    win.webContents.send('update-not-available')
+  })
+
+  updater.addListener('update-available(meta)', function (event) {
+    win.webContents.send('update-available')
+  })
+
+  updater.addListener('update-downloaded(meta)', function (event) {
+    win.webContents.send('update-available', meta)
+  })
 
   loadWin = new BrowserWindow({
     icon: 'resources/icon/icon.ico',
@@ -207,4 +217,6 @@ ipcMain.on('minimize-app', function (event) {
   win.minimize()
 })
 
-
+ipcMain.on('restart-update', function (event) {
+  updater.quitAndInstall()
+})
