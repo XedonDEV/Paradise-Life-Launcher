@@ -2,18 +2,29 @@
 
 # Unity-Life Launcher
 
-Willkommen auf dem Projekt Repoistory zum Unity-Life Launcher.
+Willkommen auf dem Repoistory zum offiziellen ArmA 3 Unity-Life Launcher.
 
-Unsere Website, sowie unseren Teamspeak kannst du [hier](https://Unity-Life.de/) finden.
+**ACHTUNG!** Dieses Projekt wurde eingestellt und wird nicht weiterentwickelt!
 
-## credits
+## Preview
+
+![Preview1](resources/img/github/prev1.jpg)
+![Preview2](resources/img/github/prev2.jpg)
+![Preview3](resources/img/github/prev3.jpg)
+![Preview4](resources/img/github/prev4.jpg)
+
+## Tools
+[ModUpdateScripts](https://github.com/lukas-fichtner/ModUpdateScripts)
+Für die Server Mod Updates
+
+## Credits
+
+**Ein besonderer Dank geht an [Kaibu](https://github.com/kaibu) mit seinem Projekt [RealLifeRPGLauncher](https://github.com/A3ReallifeRPG/RealLifeRPGLauncher)! Auf seinem Projekt basiert auch dieser Launcher.**
 
 Der Unity-Life Launcher basiert auf [Electron](http://electron.atom.io/) und ist daher eine reine HTML, Javascript und CSS Anwendung.
 
 Vielen Dank auch an alle Entwickler der verschiedenen Bibilotheken, eine genaue Liste findet ihr in der `package.json` die Bibilotheken selber auf [NPM](https://www.npmjs.com/)
 
-## contribute
+## License
 
-Du willst deinen Teil zur Entwicklung des Launchers beitragen ?  
-
-Dann Fork dir dieses Repository und erstelle einen Pull Request mit deinen Änderungen.
+The Launcher is licensed under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0)
